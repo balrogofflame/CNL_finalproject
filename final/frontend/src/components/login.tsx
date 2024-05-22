@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -11,6 +13,11 @@ function Login() {
     console.log('Submitting Login:', username, password);
     // 在這裡添加更多的登入邏輯，比如調用後端API
   };
+
+  const handleRegister = (e) =>{
+    navigate('/register');
+  };
+
 
   return (
     <div className="App">
@@ -38,6 +45,7 @@ function Login() {
             />
           </div>
           <button type="submit">登入</button>
+          <button type="button" onClick={handleRegister}>Register</button> {/* 添加注册按钮 */}
         </form>
       </header>
     </div>
