@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
+import { CSSProperties } from 'react';
 
 function Home() {
   
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // 登入邏輯，比如發送API請求
-
-    // 在這裡添加更多的登入邏輯，比如調用後端API
+  const titleStyle: CSSProperties = {
+    fontSize: '3em',
+    marginTop: '20px',
+    color: '#333',
+    textAlign: 'center',
   };
 
-  const handleRegister = (e) =>{
-    navigate('/register');
-  };
-
+  
 
   return (
     <div className="App">
-      <p>Home</p>
+      <h1 style={titleStyle}>TRIUMA</h1> {/* 添加大标题 */}
     </div>
   );
 }

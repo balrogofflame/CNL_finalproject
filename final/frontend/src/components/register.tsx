@@ -17,7 +17,7 @@ function Register() {
         console.log('Register Attempt:', username, password);
         // 这里添加注册逻辑，例如调用后端API
         // 注册成功后导航到登录页面
-        navigate('/login');
+        navigate('/home');
     };
 
     return (
