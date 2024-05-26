@@ -23,12 +23,19 @@ exports.githubCallback = async (req, res) => {
         }, {
             headers: { accept: 'application/json' }
         });
-        console.log('GitHub response:', response.data);
         const { access_token } = response.data;
-        console.log('Access Token:', access_token);
-        const redirectUrl = `http://localhost:3000/login/?token=${access_token}`;
-        console.log('Redirect URL:', redirectUrl);
-        res.redirect(redirectUrl);
+
+        // 使用access_token请求GitHub API获取用户信息
+        const userResponse = await axios.get('https://api.github.com/user', {
+            headers: { 'Authorization': `token ${access_token}` }
+        });
+
+        console.log('GitHub User:', userResponse.data);
+        console.log('GitHub Username:', userResponse.data.login);  // 打印用户名
+
+        // 可以继续处理用户信息，例如存储到数据库等
+        // 重定向回前端应用，可能带上需要的用户信息或状态
+        res.redirect(`http://localhost:3000/login?token=${access_token}`);
     } catch (error) {
         console.error('Error exchanging GitHub code for token:', error.response.data);
         res.status(500).send('Authentication failed');
