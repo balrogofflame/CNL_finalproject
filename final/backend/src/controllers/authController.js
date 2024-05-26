@@ -1,4 +1,6 @@
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+
 const { insertOrUpdateUser } = require('./dbController'); // 引入数据库操作模块
 require('dotenv').config();
 
@@ -33,6 +35,7 @@ exports.githubCallback = async (req, res) => {
 
         // 插入或更新数据库中的用户信息
         await insertOrUpdateUser(userResponse.data.login);
+        const jwtToken = jwt.sign({ id: userResponse.data.id, login: userResponse.data.login }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.redirect(`http://localhost:3000/login?token=${access_token}`);
     } catch (error) {
