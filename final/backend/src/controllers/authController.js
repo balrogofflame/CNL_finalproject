@@ -1,9 +1,8 @@
-// backend/src/controllers/authController.js
 const axios = require('axios');
+const { insertOrUpdateUser } = require('./dbController'); // 引入数据库操作模块
 require('dotenv').config();
 
 exports.githubLogin = (req, res) => {
-    // 确保这里使用的是后端的环境变量
     const url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_CALLBACK_URL}`;
     res.redirect(url);
 };
@@ -25,20 +24,23 @@ exports.githubCallback = async (req, res) => {
         });
         const { access_token } = response.data;
 
-        // 使用access_token请求GitHub API获取用户信息
         const userResponse = await axios.get('https://api.github.com/user', {
             headers: { 'Authorization': `token ${access_token}` }
         });
 
         console.log('GitHub User:', userResponse.data);
-        console.log('GitHub Username:', userResponse.data.login);  // 打印用户名
+        console.log('GitHub Username:', userResponse.data.login);
 
-        // 可以继续处理用户信息，例如存储到数据库等
-        // 重定向回前端应用，可能带上需要的用户信息或状态
+        // 插入或更新数据库中的用户信息
+        await insertOrUpdateUser(userResponse.data.login);
+
         res.redirect(`http://localhost:3000/login?token=${access_token}`);
     } catch (error) {
-        console.error('Error exchanging GitHub code for token:', error.response.data);
+        if (error.response) {
+            console.error('Error exchanging GitHub code for token:', error.response.data);
+        } else {
+            console.error('Error:', error.message);
+        }
         res.status(500).send('Authentication failed');
     }
 };
-
