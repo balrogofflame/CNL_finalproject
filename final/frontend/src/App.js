@@ -29,7 +29,7 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate replace to="/login" />} />
+      <Route path="/" element={<Navigate replace to={isAuthenticated ? "/home" : "/login"} />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<ProtectedRoute element={<Home />} />} />

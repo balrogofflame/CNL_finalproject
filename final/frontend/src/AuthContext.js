@@ -6,9 +6,8 @@ const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
     if (token) {
-      localStorage.setItem('authToken', token);
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
@@ -21,8 +20,13 @@ const AuthProvider = ({ children }) => {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
   };
 
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    window.location.href = '/login';
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginWithGitHub }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loginWithGitHub, logout }}>
       {children}
     </AuthContext.Provider>
   );
