@@ -5,6 +5,7 @@ import Login from './components/login.tsx';
 import Register from './components/register.tsx'; // 假设有一个 Register 组件
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider, AuthContext } from './AuthContext.js';
+import ProfilePage from './components/profilepage.tsx';
 
 function App() {
   return (
@@ -33,6 +34,8 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+      <Route path="/profile/:userId" element={<ProtectedRoute element={<ProfilePage />} />} />
+
     </Routes>
   );
 };

@@ -15,7 +15,6 @@ const TaskList = () => {
       reward: '100',
       selectedOption: 'money',
       endTime: new Date().toISOString(),
-      username: 'John',
       userId: 'user1'
     },
     {
