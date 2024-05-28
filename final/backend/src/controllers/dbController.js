@@ -38,6 +38,7 @@ const insertUser = async (username) => {
     return result.rows[0];
   } catch (error) {
     console.error('Error inserting into database:', error);
+    throw error;
   } finally {
     client.release();
   }
@@ -69,4 +70,4 @@ const testConnection = async () => {
 // 在启动时测试连接
 testConnection();
 
-module.exports = { insertOrUpdateUser };
+module.exports = { findUserByName, insertUser, insertOrUpdateUser };
