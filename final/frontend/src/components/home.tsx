@@ -7,7 +7,7 @@ import TaskList from './tasklist.tsx';
 const Home = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValues, setInputValues] = useState({
-    name: '',
+    questname: '',
     description: '',
     position: '',
     reward: '',
@@ -58,7 +58,7 @@ const Home = () => {
     }
 
     const data = {
-      name: inputValues.name,
+      questname: inputValues.questname,
       description: inputValues.description,
       position: inputValues.position,
       reward: inputValues.reward,
@@ -137,8 +137,8 @@ const Home = () => {
                   任務名稱:
                   <input
                     type="text"
-                    name="name"
-                    value={inputValues.name}
+                    name="questname"
+                    value={inputValues.questname}
                     onChange={handleInputChange}
                   />
                 </label>
