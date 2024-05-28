@@ -4,11 +4,11 @@ const { createTask, getAllTasks } = require('../models/taskModel');
 
 // 创建新任务
 router.post('/api/request', async (req, res) => {
-  const { questname, description, position, reward, selectedOption, endTime } = req.body;
+  const { questname, description, position, reward, selectedOption, endTime, userId } = req.body;
   const pool = req.pool;
 
   // 数据验证
-  if (!questname || !description || !position || !reward || !selectedOption || !endTime) {
+  if (!questname || !description || !position || !reward || !selectedOption || !endTime || !userId) {
     return res.status(400).send('All fields are required.');
   }
 
@@ -29,7 +29,8 @@ router.post('/api/request', async (req, res) => {
       reward,
       selectedOption,
       endTime: endDateTime.toISOString(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      userId
     };
     console.log("Hi")
     const newTask = await createTask(pool, task);

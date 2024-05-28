@@ -10,6 +10,7 @@
     "antd": "^5.17.3",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "moment-timezone": "^0.5.45",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-google-login": "^5.2.2",
