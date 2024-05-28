@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 import TaskList from './tasklist.tsx';
+import axios from 'axios';
 
 const Home = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -16,8 +16,19 @@ const Home = () => {
   });
   const [selectedOption, setSelectedOption] = useState('money'); // Set default value to "money"
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null); // 修改这里，设置类型为 string | null
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId); // 此处不会再报错
+    } else {
+      // Handle case where userId is not found, e.g., redirect to login
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleExpandClick = () => {
     setIsExpanded(true);
@@ -64,7 +75,8 @@ const Home = () => {
       reward: inputValues.reward,
       selectedOption: selectedOption,
       timestamp: currentTimestamp,
-      endTime: endDateTime.toISOString()
+      endTime: endDateTime.toISOString(),
+      userId: userId // Add userId to the task data
     };
 
     console.log(data);

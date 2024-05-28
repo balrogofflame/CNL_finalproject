@@ -12,11 +12,13 @@ const Login = () => {
     } else {
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get('token');
-      if (token) {
+      const userId = urlParams.get('userId');  // Get userId from URL parameters
+      if (token && userId) {
         localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', userId);  // Save userId in localStorage
         setIsAuthenticated(true);
         navigate('/home');
-        window.history.replaceState({}, document.title, window.location.pathname); // Remove token from URL
+        window.history.replaceState({}, document.title, window.location.pathname); // Remove token and userId from URL
       }
     }
   }, [isAuthenticated, navigate, setIsAuthenticated]);

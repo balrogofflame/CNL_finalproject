@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './tasklist.css';
 
 const TaskList = () => {
   const navigate = useNavigate();
+  const [sortMethod, setSortMethod] = useState('newToOld');
 
   // Mock data for tasks
   const tasks = [
@@ -14,7 +15,7 @@ const TaskList = () => {
       position: 'Taipei',
       reward: '100',
       selectedOption: 'money',
-      endTime: new Date().toISOString(),
+      endTime: new Date('2024-05-30T10:00:00').toISOString(),
       userId: 'user1'
     },
     {
@@ -24,7 +25,7 @@ const TaskList = () => {
       position: 'New Taipei',
       reward: 'Dinner',
       selectedOption: 'food',
-      endTime: new Date().toISOString(),
+      endTime: new Date('2024-05-29T15:00:00').toISOString(),
       userId: 'user2'
     },
     {
@@ -34,10 +35,27 @@ const TaskList = () => {
       position: 'Taichung',
       reward: '50',
       selectedOption: 'money',
-      endTime: new Date().toISOString(),
+      endTime: new Date('2024-05-28T12:00:00').toISOString(),
       userId: 'user3'
     }
   ];
+
+  const handleSortChange = (e) => {
+    setSortMethod(e.target.value);
+  };
+
+  const getSortedTasks = () => {
+    switch (sortMethod) {
+      case 'newToOld':
+        return tasks.sort((a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime());
+      case 'oldToNew':
+        return tasks.sort((a, b) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
+      default:
+        return tasks;
+    }
+  };
+
+  const sortedTasks = getSortedTasks();
 
   const handleProfileClick = (e, userId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
@@ -53,11 +71,18 @@ const TaskList = () => {
   return (
     <div className="task-list">
       <h2>Sent Tasks</h2>
-      {tasks.length === 0 ? (
+      <div className="sort-by">
+        <label htmlFor="sort">Sort by:</label>
+        <select id="sort" value={sortMethod} onChange={handleSortChange}>
+          <option value="newToOld">New to Old</option>
+          <option value="oldToNew">Old to New</option>
+        </select>
+      </div>
+      {sortedTasks.length === 0 ? (
         <p>No tasks found.</p>
       ) : (
         <ul>
-          {tasks.map((task) => (
+          {sortedTasks.map((task) => (
             <li key={task.id}>
               <h3>{task.name}</h3>
               <p className="task-details">{task.description}</p>

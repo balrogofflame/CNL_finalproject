@@ -1,54 +1,73 @@
 /* tasklist.css */
 
 .task-list {
-    padding: 20px;
-  }
-  
-  .task-list h2 {
-    margin-bottom: 20px;
-  }
-  
-  .task-list ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .task-list li {
-    cursor: pointer;
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .task-list li:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .task-list .task-details {
-    margin: 5px 0;
-  }
-  
-  .task-list .task-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .task-list button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .task-list button:hover {
-    background-color: #0056b3;
-  }
-  
+  padding: 20px;
+}
+
+.task-list h2 {
+  margin-bottom: 20px;
+}
+
+.task-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-list li {
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-list li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.task-list .task-details {
+  margin: 5px 0;
+}
+
+.task-list .task-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.task-list button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.task-list button:hover {
+  background-color: #0056b3;
+}
+
+/* New CSS for the sorting dropdown */
+.sort-by {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-by select {
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 14px;
+}
+
+.sort-by label {
+  font-weight: bold;
+}
