@@ -11,12 +11,21 @@ const createTask = async (pool, task) => {
     const { questname, description, position, reward, selectedOption, endTime, userId } = task;
     const client = await pool.connect();
     try {
+      await client.query('BEGIN'); // 开始事务
+
       const nowInTaipei = moment().tz('Asia/Taipei').format();
       const result = await client.query(
         `INSERT INTO QUEST (Quest_name, Quest_description, Quest_location, Quest_reward, Quest_reward_type, Seeker_UID , Quest_start_time, Quest_end_time) 
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
         [questname, description, position, reward, selectedOption, userId, nowInTaipei, convertToTaipeiTime(endTime)]
       );
+      //console.log(userId)
+      await client.query(
+        `UPDATE USER_ SET User_quest_quota = User_quest_quota - 1 WHERE User_ID = $1`,
+        [userId]
+      );
+  
+      await client.query('COMMIT'); // 提交事务
       return result.rows[0];
     } catch (error) {
       console.error('Error inserting task into database:', error);

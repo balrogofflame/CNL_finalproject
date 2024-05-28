@@ -12,11 +12,17 @@ interface Task {
   quest_reward: string;
   quest_reward_type: string;
   quest_end_time: string;
+  quest_id: string;
   user_name: string;
   user_rating: string;
 }
 
-const TaskList: React.FC = () => {
+interface TaskListProps {
+  userId: string; // 从 Home 组件传递过来的 userId
+}
+
+
+const TaskList: React.FC<TaskListProps> = ({ userId }) => {
   const navigate = useNavigate();
   const [sortMethod, setSortMethod] = useState('newToOld');
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -65,6 +71,17 @@ const TaskList: React.FC = () => {
     // Add your task acceptance logic here
   };
 
+  const handleReportTaskClick = async (e: React.MouseEvent, taskId: string) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
+    try {
+      const response = await axios.post('http://localhost:5000/api/report', { taskId, userId });
+      console.log(`Task ${taskId} reported`);
+      console.log(response.data.message); // 显示服务器返回的信息
+    } catch (error) {
+      console.error('Error reporting task:', error);
+    }
+  };
+
   return (
     <div className="task-list">
       <h2>Sent Tasks</h2>
@@ -80,7 +97,7 @@ const TaskList: React.FC = () => {
       ) : (
         <ul>
           {sortedTasks.map((task) => (
-            <li key={task.seeker_uid}>
+            <li key={task.quest_id}>
               <h3>{task.quest_name}</h3>
               <p className="task-details">{task.quest_description}</p>
               <p className="task-details"><strong>Position:</strong> {task.quest_location}</p>
@@ -91,6 +108,7 @@ const TaskList: React.FC = () => {
               <div className="task-buttons">
                 <button onClick={(e) => handleProfileClick(e, task.seeker_uid)}>View Profile</button>
                 <button onClick={(e) => handleAcceptTaskClick(e, task.seeker_uid)}>Accept Task</button>
+                <button onClick={(e) => handleReportTaskClick(e, task.quest_id)}>Report Task</button>
               </div>
             </li>
           ))}

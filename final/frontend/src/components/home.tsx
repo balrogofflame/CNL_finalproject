@@ -130,7 +130,7 @@ const Home = () => {
       </div>
       <div style={{ display: 'flex', height: 'calc(100vh - 50px)', marginTop: '20px' }}>
         <div style={{ flex: 1, background: '#f0f0f0' }}>
-          <TaskList />
+          {userId &&<TaskList userId={userId}/>}
         </div>
         <div style={{
           width: '2px',
