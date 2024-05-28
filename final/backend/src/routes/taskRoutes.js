@@ -1,3 +1,5 @@
+const { Pool } = require('pg');
+
 const express = require('express');
 const router = express.Router();
 const { createTask, getAllTasks } = require('../models/taskModel');
@@ -42,13 +44,13 @@ router.post('/api/request', async (req, res) => {
 
 // 获取所有任务
 router.get('/api/tasks', async (req, res) => {
-  const pool = req.pool;
-  try {
-    const tasks = await getAllTasks(pool);
-    res.json(tasks);
-  } catch (error) {
-    res.status(500).send('Error fetching tasks: ' + error.message);
-  }
-});
-
-module.exports = router;
+    const pool = req.pool;
+    try {
+      const tasks = await getAllTasks(pool);
+      res.json(tasks);
+    } catch (error) {
+      res.status(500).send('Error fetching tasks: ' + error.message);
+    }
+  });
+  
+  module.exports = router;

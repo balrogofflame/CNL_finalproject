@@ -31,7 +31,10 @@ const testConnection = async () => {
   }
 };
 
+
+
 testConnection();
+
 
 app.use((req, res, next) => {
   req.pool = pool;

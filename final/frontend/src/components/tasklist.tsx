@@ -1,68 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './tasklist.css';
 
-const TaskList = () => {
+// 定义任务类型
+interface Task {
+  seeker_uid: string;
+  quest_name: string;
+  quest_description: string;
+  quest_location: string;
+  quest_reward: string;
+  quest_reward_type: string;
+  quest_end_time: string;
+  user_name: string;
+  user_rating: string;
+}
+
+const TaskList: React.FC = () => {
   const navigate = useNavigate();
   const [sortMethod, setSortMethod] = useState('newToOld');
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Mock data for tasks
-  const tasks = [
-    {
-      id: 1,
-      name: 'Buy Groceries',
-      description: 'Need someone to buy groceries for me',
-      position: 'Taipei',
-      reward: '100',
-      selectedOption: 'money',
-      endTime: new Date('2024-05-30T10:00:00').toISOString(),
-      userId: 'user1'
-    },
-    {
-      id: 2,
-      name: 'Fix Laptop',
-      description: 'Looking for someone to fix my laptop',
-      position: 'New Taipei',
-      reward: 'Dinner',
-      selectedOption: 'food',
-      endTime: new Date('2024-05-29T15:00:00').toISOString(),
-      userId: 'user2'
-    },
-    {
-      id: 3,
-      name: 'Help with Homework',
-      description: 'Need help with math homework',
-      position: 'Taichung',
-      reward: '50',
-      selectedOption: 'money',
-      endTime: new Date('2024-05-28T12:00:00').toISOString(),
-      userId: 'user3'
-    }
-  ];
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get<Task[]>('http://localhost:5000/api/tasks');
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
 
-  const handleSortChange = (e) => {
+    fetchTasks();
+  }, []);
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortMethod(e.target.value);
   };
 
-  const getSortedTasks = () => {
-    switch (sortMethod) {
-      case 'newToOld':
-        return tasks.sort((a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime());
-      case 'oldToNew':
-        return tasks.sort((a, b) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
-      default:
-        return tasks;
-    }
+  const getSortedTasks = (): Task[] => {
+    const sortedTasks = [...tasks]; // 创建任务的副本以避免直接修改状态
+    return sortedTasks.sort((a, b) => {
+      const dateA = new Date(a.quest_end_time).getTime();
+      const dateB = new Date(b.quest_end_time).getTime();
+      if (sortMethod === 'newToOld') {
+        return dateB - dateA;
+      } else if (sortMethod === 'oldToNew') {
+        return dateA - dateB;
+      }
+      return 0; // 如果没有匹配到排序方法，则返回 0 表示不排序
+    });
   };
 
   const sortedTasks = getSortedTasks();
 
-  const handleProfileClick = (e, userId: string) => {
+  const handleProfileClick = (e: React.MouseEvent, userId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
     navigate(`/profile/${userId}`);
   };
 
-  const handleAcceptTaskClick = (e, taskId: number) => {
+  const handleAcceptTaskClick = (e: React.MouseEvent, taskId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
     console.log(`Task ${taskId} accepted`);
     // Add your task acceptance logic here
@@ -83,15 +80,17 @@ const TaskList = () => {
       ) : (
         <ul>
           {sortedTasks.map((task) => (
-            <li key={task.id}>
-              <h3>{task.name}</h3>
-              <p className="task-details">{task.description}</p>
-              <p className="task-details"><strong>Position:</strong> {task.position}</p>
-              <p className="task-details"><strong>Reward:</strong> {task.reward} ({task.selectedOption})</p>
-              <p className="task-details"><strong>End Time:</strong> {new Date(task.endTime).toLocaleString()}</p>
+            <li key={task.seeker_uid}>
+              <h3>{task.quest_name}</h3>
+              <p className="task-details">{task.quest_description}</p>
+              <p className="task-details"><strong>Position:</strong> {task.quest_location}</p>
+              <p className="task-details"><strong>Reward:</strong> {task.quest_reward} ({task.quest_reward_type})</p>
+              <p className="task-details"><strong>End Time:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
+              <p className="task-details"><strong>Username:</strong> {task.user_name}</p>
+              <p className="task-details"><strong>User Rating:</strong> {task.user_rating}</p>
               <div className="task-buttons">
-                <button onClick={(e) => handleProfileClick(e, task.userId)}>View Profile</button>
-                <button onClick={(e) => handleAcceptTaskClick(e, task.id)}>Accept Task</button>
+                <button onClick={(e) => handleProfileClick(e, task.seeker_uid)}>View Profile</button>
+                <button onClick={(e) => handleAcceptTaskClick(e, task.seeker_uid)}>Accept Task</button>
               </div>
             </li>
           ))}

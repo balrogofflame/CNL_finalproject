@@ -1,4 +1,6 @@
 const moment = require('moment-timezone');
+const { Pool } = require('pg');
+require('dotenv').config();
 
 const convertToTaipeiTime = (utcTime) => {
   return moment(utcTime).tz('Asia/Taipei').format('YYYY-MM-DDTHH:mm:ssZ');
@@ -24,10 +26,14 @@ const createTask = async (pool, task) => {
     }
   };
   
-  const getAllTasks = async (pool) => {
+const getAllTasks = async (pool) => {
     const client = await pool.connect();
     try {
-      const result = await client.query('SELECT * FROM tasks');
+      const result = await client.query(
+        `SELECT t.*, u.User_name, u.User_rating 
+         FROM quest t
+         JOIN USER_ u ON t.Seeker_UID = u.user_id`
+      );
       return result.rows;
     } catch (error) {
       console.error('Error fetching tasks from database:', error);
