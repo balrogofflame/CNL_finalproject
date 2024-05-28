@@ -6,14 +6,14 @@ import { AuthContext } from '../AuthContext';
 const Home = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValues, setInputValues] = useState({
-    field1: '',
-    field2: '',
-    field3: '',
-    field4: '',
+    name: '',
+    description: '',
+    position: '',
+    reward: '',
     endDate: '',
     endTime: ''
   });
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('money'); // Set default value to "money"
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -43,20 +43,34 @@ const Home = () => {
       return;
     }
 
+    // Validate reward input if selected option is "money"
+    if (selectedOption === 'money') {
+      if (/[^0-9]/.test(inputValues.reward)) {
+        alert('Please enter only numeric values for money.');
+        setInputValues((prevValues) => ({
+          ...prevValues,
+          reward: ''
+        }));
+        setLoading(false);
+        return;
+      }
+    }
+
     const data = {
-      field1: inputValues.field1,
-      field2: inputValues.field2,
-      field3: inputValues.field3,
-      field4: inputValues.field4,
+      name: inputValues.name,
+      description: inputValues.description,
+      position: inputValues.position,
+      reward: inputValues.reward,
       selectedOption: selectedOption,
       timestamp: currentTimestamp,
       endTime: endDateTime.toISOString()
     };
-    console.log(data)
+
+    console.log(data);
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/your-endpoint', data, {
+      const response = await axios.post('http://localhost:5000/api/task', data, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -119,59 +133,59 @@ const Home = () => {
               <h2>Expanded View</h2>
               <div>
                 <label>
-                  Field 1:
+                任務名稱:
                   <input
                     type="text"
-                    name="field1"
-                    value={inputValues.field1}
+                    name="name"
+                    value={inputValues.name}
                     onChange={handleInputChange}
                   />
                 </label>
               </div>
               <div>
                 <label>
-                  Field 2:
+                任務內容:
                   <input
                     type="text"
-                    name="field2"
-                    value={inputValues.field2}
+                    name="description"
+                    value={inputValues.description}
                     onChange={handleInputChange}
                   />
                 </label>
               </div>
               <div>
                 <label>
-                  Field 3:
+                任務地點:
                   <input
                     type="text"
-                    name="field3"
-                    value={inputValues.field3}
+                    name="position"
+                    value={inputValues.position}
                     onChange={handleInputChange}
                   />
                 </label>
               </div>
               <div>
                 <label>
-                  Field 4:
-                  <input
-                    type="text"
-                    name="field4"
-                    value={inputValues.field4}
-                    onChange={handleInputChange}
-                  />
-                </label>
-              </div>
-              <div>
-                <label>
-                  Select Option:
+                  報酬種類:
                   <select value={selectedOption} onChange={handleSelectChange}>
-                    <option value="">Select...</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="money">金錢(新台幣)</option>
+                    <option value="food">食物</option>
+                    <option value="others">其他</option>
                   </select>
                 </label>
               </div>
+              <div>
+                <label>
+                  報酬內容:
+                  <input
+                    type="text"
+                    name="reward"
+                    value={inputValues.reward}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
+              
               <div>
                 <label>
                   結束日期:
