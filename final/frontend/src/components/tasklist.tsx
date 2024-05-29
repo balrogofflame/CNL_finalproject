@@ -73,6 +73,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId }) => {
 
   const handleReportTaskClick = async (e: React.MouseEvent, taskId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
+    console.log(taskId);
     try {
       const response = await axios.post('http://localhost:5000/api/report', { taskId, userId });
       console.log(`Task ${taskId} reported`);

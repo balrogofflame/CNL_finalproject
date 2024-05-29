@@ -14,7 +14,11 @@ router.post('/api/report', async (req, res) => {
 
   try {
     const result = await reportTask(pool, taskId, userId);
-    res.status(200).json({ message: 'Task reported successfully', quota: result.User_report_quota });
+    if (result && result.user_report_quota !== undefined) {
+      res.status(200).json({ message: 'Task reported successfully', quota: result.user_report_quota }); // 确保属性名正确
+    } else {
+      res.status(500).send('Error reporting task: Report quota not found');
+    }
   } catch (error) {
     res.status(500).send('Error reporting task: ' + error.message);
   }

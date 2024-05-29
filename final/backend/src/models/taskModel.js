@@ -68,4 +68,19 @@ const getAllTasks = async (pool) => {
     }
   };
   
-  module.exports = { createTask, getAllTasks, getTaskById };
+const deleteTaskById = async (pool, taskId) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN'); // 开始事务
+    await client.query('DELETE FROM QUEST WHERE Quest_ID = $1', [taskId]);
+    await client.query('COMMIT'); // 提交事务
+  } catch (error) {
+    await client.query('ROLLBACK'); // 回滚事务
+    console.error('Error deleting task from database:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
+module.exports = { createTask, getAllTasks, getTaskById, deleteTaskById };

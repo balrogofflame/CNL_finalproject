@@ -11,16 +11,18 @@ const reportTask = async (pool, taskId, userId) => {
     
 
     // 更新用户的举报配额
+    console.log(userId);
     const result = await client.query(
-      `UPDATE USER_ SET User_report_quota = User_report_quota - 1 WHERE User_ID = $1 RETURNING User_report_quota`,
+      `UPDATE USER_ SET user_report_quota = user_report_quota - 1 WHERE user_id = $1 RETURNING user_report_quota`,
       [userId]
     );
-
+    console.log(result.rows[0])
     await client.query('COMMIT'); // 提交事务
     return result.rows[0];
   } catch (error) {
     await client.query('ROLLBACK'); // 回滚事务
     console.error('Error reporting task in database:', error);
+    print(error);
     throw error;
   } finally {
     client.release();
