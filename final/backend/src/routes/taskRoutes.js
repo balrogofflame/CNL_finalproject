@@ -35,8 +35,9 @@ router.post('/api/request', async (req, res) => {
       userId
     };
     console.log("Hi")
-    const newTask = await createTask(pool, task);
-    res.status(200).send('Task created successfully');
+    const createdTask = await createTask(pool, task);
+    console.log(createdTask)
+    res.status(200).json(createdTask); // 返回创建的任务数据
   } catch (error) {
     res.status(500).send('Error creating task: ' + error.message);
   }
