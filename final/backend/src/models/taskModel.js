@@ -51,5 +51,21 @@ const getAllTasks = async (pool) => {
       client.release();
     }
   };
+
+  const getTaskById = async (pool, taskId) => {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT * FROM quest WHERE quest_id = $1`,
+        [taskId]
+      );
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error fetching task from database:', error);
+      throw error;
+    } finally {
+      client.release();
+    }
+  };
   
-  module.exports = { createTask, getAllTasks };
+  module.exports = { createTask, getAllTasks, getTaskById };

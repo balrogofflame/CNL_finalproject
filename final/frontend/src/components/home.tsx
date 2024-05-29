@@ -90,7 +90,9 @@ const Home = () => {
       });
 
       if (response.status === 200) {
-        console.log('Data sent successfully');
+        const returnedData = response.data; // 获取后端返回的数据
+        console.log('Data sent successfully', returnedData);
+        navigate(`/task-details/${returnedData.quest_id}`); // 传递任务ID到新页面
       } else {
         console.error('Error sending data:', response.statusText);
       }

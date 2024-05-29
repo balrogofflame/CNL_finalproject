@@ -32,17 +32,14 @@ const testConnection = async () => {
   }
 };
 
-
-
 testConnection();
-
 
 app.use((req, res, next) => {
   req.pool = pool;
   next();
 });
 
-app.use('/', authRoutes);
+app.use('/', authRoutes); // 确保路径正确
 app.use('/', taskRoutes);
 app.use('/', reportRoutes); // 使用新增的路由
 
