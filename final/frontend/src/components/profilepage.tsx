@@ -1,31 +1,75 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const ProfilePage = () => {
-  const { userId } = useParams<{ userId: string }>();
+// 定义任务类型
+interface Comment {
+  quest_id: string;
+  comment_role: string;
+  comment_content: string;
+  comment_rating: number; 
+}
 
-  // Log the userId to ensure we are receiving it correctly
-  console.log('Received userId:', userId);
+interface CommentListProps {
+  UID: string; // 从 Home 组件传递过来的 userId
+}
 
-  // Mock data for user profiles
-  const users: Record<string, { name: string; email: string; description: string }> = {
-    user1: { name: 'Alice', email: 'alice@example.com', description: 'Grocery shopper' },
-    user2: { name: 'Bob', email: 'bob@example.com', description: 'Laptop repair expert' },
-    user3: { name: 'Charlie', email: 'charlie@example.com', description: 'Math tutor' }
-  };
+const CommentList: React.FC<CommentListProps> = ({ UID }) => {
+  const [comments, setComments] = useState<Comment[]>([]);
+  
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get<Comment[]>(`http://localhost:5000/api/${UID}/comments`);
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
 
-  if (!userId || !users[userId]) {
-    console.log('User not found');
-    return <div>User not found.</div>;
-  }
-
-  const user = users[userId];
+    if (UID) {
+      fetchComments();
+    }
+  }, [UID]); // 确保在 UID 发生变化时重新获取评论数据
 
   return (
     <div>
-      <h1>{user.name}</h1>
-      <p>{user.email}</p>
-      <p>{user.description}</p>
+      <h1>Comments for User {UID}</h1>
+      {comments.length === 0 ? (
+        <p>No comments found.</p>
+      ) : (
+        <div>
+          {comments.map((comment, index) => (
+            <div key={index} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+              <p><strong>Quest ID:</strong> {comment.quest_id}</p>
+              <p><strong>Role:</strong> {comment.comment_role}</p>
+              <p><strong>Content:</strong> {comment.comment_content}</p>
+              <p><strong>Rating:</strong> {comment.comment_rating}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ProfilePage = () => {
+  const { userId } = useParams<{ userId: string }>();
+  const navigate = useNavigate();
+  
+  // Log the userId to ensure we are receiving it correctly
+  console.log('Received userId:', userId);
+
+  const handleBackClick = () => {
+    navigate('/');
+  };
+
+  return (
+    <div>
+      <CommentList UID={userId as string} />
+      <button onClick={handleBackClick} style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}>
+        Back to homepage
+      </button>
     </div>
   );
 };

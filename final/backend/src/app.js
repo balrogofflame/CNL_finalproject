@@ -4,7 +4,8 @@ const { Pool } = require('pg');
 require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-const reportRoutes = require('./routes/reportRoutes'); // 新增的路由
+const reportRoutes = require('./routes/reportRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 app.use(cors());
@@ -19,7 +20,6 @@ const pool = new Pool({
   }
 });
 
-// 测试数据库连接
 const testConnection = async () => {
   const client = await pool.connect();
   try {
@@ -39,9 +39,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', authRoutes); // 确保路径正确
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
+app.use('/', authRoutes);
 app.use('/', taskRoutes);
-app.use('/', reportRoutes); // 使用新增的路由
+app.use('/', reportRoutes);
+app.use('/', profileRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

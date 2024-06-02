@@ -14,5 +14,6 @@
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.45",
     "pg": "^8.11.5"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

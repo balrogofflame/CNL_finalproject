@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const connectionString = process.env.DATABASE_URL || 'your_default_connection_string';
 
-// 创建一个连接池
 const pool = new Pool({
   connectionString,
   ssl: {
@@ -18,10 +17,10 @@ const findUserByName = async (username) => {
       `SELECT * FROM USER_ WHERE User_name = $1`,
       [username]
     );
-    return result.rows; // 返回查询结果的行
+    return result.rows;
   } catch (error) {
     console.error('Error querying database:', error);
-    return []; // 返回空数组表示未找到用户
+    return [];
   } finally {
     client.release();
   }
@@ -67,7 +66,6 @@ const testConnection = async () => {
   }
 };
 
-// 在启动时测试连接
 testConnection();
 
-module.exports = { findUserByName, insertUser, insertOrUpdateUser };
+module.exports = { pool, findUserByName, insertUser, insertOrUpdateUser };
