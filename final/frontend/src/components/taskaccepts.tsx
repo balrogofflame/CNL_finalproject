@@ -66,6 +66,11 @@ const TaskAccepts = () => {
     console.log('gethehaeaw');
   };
 
+
+  const handleGoHome = async () => {
+    navigate('/home');
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -85,6 +90,8 @@ const TaskAccepts = () => {
         <p><strong>報酬內容:</strong> {task.quest_reward}</p>
         <p><strong>結束時間:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
         <button onClick={handleRefreshClick}>刷新</button>
+        <button onClick={handleGoHome}>回主業</button>
+
       </div>
     </div>
   );

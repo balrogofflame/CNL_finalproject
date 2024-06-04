@@ -128,7 +128,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
               <p className="task-details"><strong>User Rating:</strong> {task.user_rating}</p>
               <div className="task-buttons">
                 <button onClick={(e) => handleProfileClick(e, task.seeker_uid)}>View Profile</button>
-                <button onClick={(e) => handleAcceptTaskClick(e, task.seeker_uid)}>Accept Task</button>
+                <button onClick={(e) => handleAcceptTaskClick(e, task.quest_id)}>Accept Task</button>
                 <button onClick={(e) => handleReportTaskClick(e, task.quest_id)}>Report Task</button>
               </div>
             </li>

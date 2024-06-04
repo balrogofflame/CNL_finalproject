@@ -131,6 +131,7 @@ router.get('/api/accept/request/:id', async (req, res) => {
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(id)
     const task = await getTaskById(pool, id);
 
     if (!task) {
