@@ -84,7 +84,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
 
   const handleAcceptTaskClick = (e: React.MouseEvent, taskId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
-    console.log(`Task ${taskId} accepted`);
+    navigate(`/task-accepts/${userId}/${taskId}`);
     // Add your task acceptance logic here
   };
 
