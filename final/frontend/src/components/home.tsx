@@ -4,7 +4,51 @@ import { AuthContext } from '../AuthContext';
 import TaskList from './tasklist.tsx';
 import axios from 'axios';
 
+const geoFindMe = () => {
+ 
+  if (!navigator.geolocation) {
+    console.log("<p>Geolocation is not supported by your browser</p>");
+    return;
+  }
+
+  function success(position) {
+    var longitude = parseFloat(position.coords.longitude);
+    var latitude = parseFloat(position.coords.latitude);
+
+    console.log(latitude, longitude)
+  }
+
+  function error() {
+    console.log("Unable to retrieve your location");
+  }
+  navigator.geolocation.getCurrentPosition(success, error);
+
+}
+
 const Home = () => {
+  const geoFindMe = () => {
+    if (!navigator.geolocation) {
+      console.log("<p>Geolocation is not supported by your browser</p>");
+      return;
+    }
+  
+    function success(position) {
+      var longitude = position.coords.longitude;
+      var latitude = position.coords.latitude;
+  
+      // 更新状态以存储经度和纬度
+      setLocation({ longitude, latitude });
+  
+      //console.log(latitude, longitude)
+    }
+  
+    function error() {
+      console.log("Unable to retrieve your location");
+    }
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+  
+  const [location, setLocation] = useState({ longitude: String, latitude: String });
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValues, setInputValues] = useState({
     questname: '',
@@ -21,6 +65,12 @@ const Home = () => {
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
+    // 调用geoFindMe函数来获取地理位置信息
+    geoFindMe();
+    // 其他useEffect逻辑...
+  }, []); // 确保这个effect只在组件挂载时运行
+
+  useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId); // 此处不会再报错
@@ -35,7 +85,6 @@ const Home = () => {
   };
 
   const handleSendClick = async () => {
-    const currentTimestamp = new Date().toISOString();
 
     // Validate endDate and endTime
     if (!inputValues.endDate || !inputValues.endTime) {
@@ -74,8 +123,9 @@ const Home = () => {
       position: inputValues.position,
       reward: inputValues.reward,
       selectedOption: selectedOption,
-      timestamp: currentTimestamp,
       endTime: endDateTime.toISOString(),
+      quest_longitude: location.longitude,
+      quest_latitude: location.latitude,
       userId: userId // Add userId to the task data
     };
 

@@ -9,6 +9,8 @@ interface Task {
   quest_name: string;
   quest_description: string;
   quest_location: string;
+  quest_logitude: number;
+  quest_latitude: number;
   quest_reward: string;
   quest_reward_type: string;
   quest_end_time: string;
@@ -101,7 +103,9 @@ const TaskList: React.FC<TaskListProps> = ({ userId }) => {
             <li key={task.quest_id}>
               <h3>{task.quest_name}</h3>
               <p className="task-details">{task.quest_description}</p>
-              <p className="task-details"><strong>Position:</strong> {task.quest_location}</p>
+              <p className="task-details"><strong>Location:</strong> {task.quest_location}</p>
+              <p className="task-details"><strong>Longitude:</strong> {task.quest_logitude}</p>
+              <p className="task-details"><strong>Latitude:</strong> {task.quest_latitude}</p>
               <p className="task-details"><strong>Reward:</strong> {task.quest_reward} ({task.quest_reward_type})</p>
               <p className="task-details"><strong>End Time:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
               <p className="task-details"><strong>Username:</strong> {task.user_name}</p>

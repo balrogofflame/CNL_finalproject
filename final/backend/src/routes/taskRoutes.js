@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 // 创建新任务
 router.post('/api/request', async (req, res) => {
-  const { questname, description, position, reward, selectedOption, endTime, userId } = req.body;
+  const { questname, description, position, reward, selectedOption, endTime, quest_longitude, quest_latitude, userId } = req.body;
   const pool = req.pool;
 
   // 数据验证
@@ -29,7 +29,8 @@ router.post('/api/request', async (req, res) => {
       reward,
       selectedOption,
       endTime: endDateTime.toISOString(),
-      timestamp: new Date().toISOString(),
+      quest_longitude,
+      quest_latitude,
       userId
     };
     const createdTask = await createTask(pool, task);

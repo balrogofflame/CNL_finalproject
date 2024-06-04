@@ -8,15 +8,15 @@ const convertToTaipeiTime = (utcTime) => {
 
 // 从app.js传递pool实例，无需单独导入
 const createTask = async (pool, task) => {
-    const { questname, description, position, reward, selectedOption, endTime, userId } = task;
+    const { questname, description, position, reward, selectedOption, endTime, quest_longitude, quest_latitude, userId } = task;
     const client = await pool.connect();
     try {
       await client.query('BEGIN'); // 开始事务
 
       const result = await client.query(
-        `INSERT INTO QUEST (Quest_name, Quest_description, Quest_location, Quest_reward, Quest_reward_type, Seeker_UID , Quest_end_time) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-        [questname, description, position, reward, selectedOption, userId, convertToTaipeiTime(endTime)]
+        `INSERT INTO QUEST (Quest_name, Quest_description, Quest_location, Quest_logitude, Quest_latitude, Quest_reward, Quest_reward_type, Seeker_UID , Quest_end_time) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+        [questname, description, position, quest_longitude, quest_latitude, reward, selectedOption, userId, convertToTaipeiTime(endTime)]
       );
       //console.log(userId)
       await client.query(
