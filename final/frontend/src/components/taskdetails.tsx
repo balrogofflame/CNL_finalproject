@@ -97,6 +97,15 @@ const TaskDetails = () => {
         <p><strong>結束時間:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
         <button onClick={handleCancelClick}>Cancel Task</button>
       </div>
+      <div style={{
+          width: '2px',
+          background: '#000',
+          margin: '0 10px',
+        }}></div>
+        <div style={{ flex: 1, background: '#ffffff', padding: '20px', position: 'relative' }}>
+          <h1>Hello</h1>
+          
+        </div>
     </div>
   );
 };
