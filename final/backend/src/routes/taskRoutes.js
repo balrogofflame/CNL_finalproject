@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createTask, getAllTasks, getTaskById, deleteTaskById, acceptTask } = require('../models/taskModel'); // 确保导入 deleteTaskById
+const { createTask, getAllTasks, getTaskById, deleteTaskById, acceptTask, getAcceptedUsers } = require('../models/taskModel');
 const jwt = require('jsonwebtoken');
 
 // 创建新任务
@@ -169,5 +169,38 @@ router.post('/api/accept-task/:id', async (req, res) => {
   }
 });
 
+
+router.get('/api/task/accepts/:id', async (req, res) => {
+  const pool = req.pool;
+  const { id } = req.params;
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).send('Authorization header is required.');
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const task = await getTaskById(pool, id);
+    if (!task) {
+      return res.status(404).send('Task not found.');
+    }
+
+    if (task.seeker_uid !== decoded.id) {
+      return res.status(403).send('You do not have permission to view this task.');
+    }
+
+    const acceptedUsers = await getAcceptedUsers(pool, id);
+    res.status(200).json(acceptedUsers);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).send({ message: 'jwt expired' });
+    }
+    console.error('Error fetching accepted users:', error);
+    res.status(500).send('Error fetching accepted users: ' + error.message);
+  }
+});
 
 module.exports = router;

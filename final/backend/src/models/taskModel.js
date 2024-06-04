@@ -106,5 +106,27 @@ const acceptTask = async (pool, taskId, userId) => {
 };
 
 
+const getAcceptedUsers = async (pool, questId) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      `SELECT User_name, User_rating
+       FROM USER_
+       WHERE User_ID IN (
+         SELECT User_ID
+         FROM ACCEPT
+         WHERE Quest_ID = $1
+       )`,
+      [questId]
+    );
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching accepted users:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+};
 
-module.exports = { createTask, getAllTasks, getTaskById, deleteTaskById, acceptTask };
+
+module.exports = { createTask, getAllTasks, getTaskById, deleteTaskById, acceptTask, getAcceptedUsers };
