@@ -82,4 +82,29 @@ const deleteTaskById = async (pool, taskId) => {
   }
 };
 
-module.exports = { createTask, getAllTasks, getTaskById, deleteTaskById };
+
+const acceptTask = async (pool, taskId, userId) => {
+  const client = await pool.connect();
+  try {
+      await client.query('BEGIN'); // 开始事务
+
+      // 插入 ACCEPT 表
+      const insertResult = await client.query(
+          `INSERT INTO ACCEPT (User_ID, Quest_ID) VALUES ($1, $2) RETURNING *`,
+          [userId, taskId]
+      );
+
+      await client.query('COMMIT'); // 提交事务
+      return insertResult.rows[0]; // 返回插入后的记录
+  } catch (error) {
+      await client.query('ROLLBACK'); // 回滚事务
+      console.error('Error accepting task:', error);
+      throw error;
+  } finally {
+      client.release();
+  }
+};
+
+
+
+module.exports = { createTask, getAllTasks, getTaskById, deleteTaskById, acceptTask };

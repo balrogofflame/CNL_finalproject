@@ -82,9 +82,23 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
     navigate(`/profile/${userId}`);
   };
 
-  const handleAcceptTaskClick = (e: React.MouseEvent, taskId: string) => {
+  const handleAcceptTaskClick = async (e: React.MouseEvent, taskId: string) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
-    navigate(`/task-accepts/${userId}/${taskId}`);
+      // 調用後端接口接受任務
+      
+      try {
+        // 調用後端接口接受任務
+        await axios.post(`http://localhost:5000/api/accept-task/${taskId}`, { userId });
+        console.log(`Task ${taskId} accepted`);
+    
+        // 跳轉到特定的頁面，例如到任務詳情頁面
+        navigate(`/task-accepts/${userId}/${taskId}`);
+      } catch (error) {
+        console.error('Error accepting task:', error);
+        alert('Failed to accept task: ' + (error.response?.data.message || error.message));
+      }
+      // 跳轉到特定的頁面，例如到任務詳情頁面
+    
     // Add your task acceptance logic here
   };
 
