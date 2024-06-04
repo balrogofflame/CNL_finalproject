@@ -54,10 +54,12 @@ const getAllTasks = async (pool) => {
   const getTaskById = async (pool, taskId) => {
     const client = await pool.connect();
     try {
+      console.log(taskId);
       const result = await client.query(
         `SELECT * FROM quest WHERE quest_id = $1`,
         [taskId]
       );
+      console.log(result.rows[0]);
       return result.rows[0];
     } catch (error) {
       console.error('Error fetching task from database:', error);

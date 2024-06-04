@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider, AuthContext } from './AuthContext.js';
 import ProfilePage from './components/profilepage.tsx';
 import TaskDetails from './components/taskdetails.tsx';
+import TaskAccepts from './components/taskaccepts.tsx';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ const AppRoutes = () => {
       <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
       <Route path="/profile/:userId" element={<ProtectedRoute element={<ProfilePage />} />} />
       <Route path="/task-details/:id" element={<ProtectedRoute element={<TaskDetails />} />} />
+      <Route path="/task-accepts/:userId/:id" element={<ProtectedRoute element={<TaskAccepts />} />} />
 
 
     </Routes>

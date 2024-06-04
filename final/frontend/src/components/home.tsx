@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 import TaskList from './tasklist.tsx';
 import axios from 'axios';
-
+/*
 const geoFindMe = () => {
  
   if (!navigator.geolocation) {
@@ -23,7 +23,7 @@ const geoFindMe = () => {
   }
   navigator.geolocation.getCurrentPosition(success, error);
 
-}
+}*/
 
 const Home = () => {
   const geoFindMe = () => {
@@ -83,6 +83,9 @@ const Home = () => {
   const handleExpandClick = () => {
     setIsExpanded(true);
   };
+
+  
+
 
   const handleSendClick = async () => {
 

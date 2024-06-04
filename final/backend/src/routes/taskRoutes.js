@@ -67,12 +67,11 @@ router.get('/api/request/:id', async (req, res) => {
     const task = await getTaskById(pool, id);
 
     if (!task) {
+
       return res.status(404).send('Task not found.');
     }
 
-    if (task.seeker_uid !== decoded.id) {
-      return res.status(403).send('You do not have permission to view this task.');
-    }
+    
 
     res.status(200).json(task);
   } catch (error) {
