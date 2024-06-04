@@ -4,18 +4,30 @@
 
 final@^0.2.0:
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/final/-/final-0.2.0.tgz#24efc4b45b123c7877e7c97ff0655a264b4be7a6"
+  resolved "https://registry.npmjs.org/final/-/final-0.2.0.tgz"
   integrity sha512-a+vBNIio8nZYzRNRrM40toh37B2ss22HgOC28YYqvjelavfg5MI9DrUzx3U5oeX65N90otxpsNTOdaxY7DEwlA==
   dependencies:
     lodash "^4.6.1"
     minimist "^1.2.0"
 
+geolocation@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npmjs.org/geolocation/-/geolocation-0.0.0.tgz"
+  integrity sha512-DGhMAWE877o7sROrO8cpXBqa2MhI/PV41WevnIu3J8+oNWDExRgLQfrCcQzxPom27RIq/X/xNDHZYNwAlk3QfA==
+  dependencies:
+    inherits "~1.0.0"
+
+inherits@~1.0.0:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/inherits/-/inherits-1.0.2.tgz"
+  integrity sha512-Al67oatbRSo3RV5hRqIoln6Y5yMVbJSIn4jEJNL7VCImzq/kLr7vvb6sFRJXqr8rpHc/2kJOM+y0sPKN47VdzA==
+
 lodash@^4.6.1:
   version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 minimist@^1.2.0:
   version "1.2.8"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==

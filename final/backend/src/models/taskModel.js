@@ -13,11 +13,10 @@ const createTask = async (pool, task) => {
     try {
       await client.query('BEGIN'); // 开始事务
 
-      const nowInTaipei = moment().tz('Asia/Taipei').format();
       const result = await client.query(
-        `INSERT INTO QUEST (Quest_name, Quest_description, Quest_location, Quest_reward, Quest_reward_type, Seeker_UID , Quest_start_time, Quest_end_time) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-        [questname, description, position, reward, selectedOption, userId, nowInTaipei, convertToTaipeiTime(endTime)]
+        `INSERT INTO QUEST (Quest_name, Quest_description, Quest_location, Quest_reward, Quest_reward_type, Seeker_UID , Quest_end_time) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+        [questname, description, position, reward, selectedOption, userId, convertToTaipeiTime(endTime)]
       );
       //console.log(userId)
       await client.query(
