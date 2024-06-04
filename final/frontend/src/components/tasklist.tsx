@@ -3,6 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './tasklist.css';
 
+function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longitude2, unit = 'kilometers') {
+  let theta = longitude1 - longitude2;
+  let distance = 60 * 1.1515 * (180/Math.PI) * Math.acos(
+      Math.sin(latitude1 * (Math.PI/180)) * Math.sin(latitude2 * (Math.PI/180)) + 
+      Math.cos(latitude1 * (Math.PI/180)) * Math.cos(latitude2 * (Math.PI/180)) * Math.cos(theta * (Math.PI/180))
+  );
+  if (unit === 'miles') {
+      return distance.toFixed(2);
+  } else if (unit === 'kilometers') {
+      return (distance * 1.609344).toFixed(2);
+  }
+}
+
 // 定义任务类型
 interface Task {
   seeker_uid: string;
@@ -21,10 +34,12 @@ interface Task {
 
 interface TaskListProps {
   userId: string; // 从 Home 组件传递过来的 userId
+  helperLongitude: number;
+  helperLatitude: number;
 }
 
 
-const TaskList: React.FC<TaskListProps> = ({ userId }) => {
+const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLatitude }) => {
   const navigate = useNavigate();
   const [sortMethod, setSortMethod] = useState('newToOld');
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -106,6 +121,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId }) => {
               <p className="task-details"><strong>Location:</strong> {task.quest_location}</p>
               <p className="task-details"><strong>Longitude:</strong> {task.quest_logitude}</p>
               <p className="task-details"><strong>Latitude:</strong> {task.quest_latitude}</p>
+              <p className="task-details"><strong>Distance:</strong> {getDistanceBetweenPoints(task.quest_latitude, task.quest_logitude, helperLatitude, helperLongitude)}</p>
               <p className="task-details"><strong>Reward:</strong> {task.quest_reward} ({task.quest_reward_type})</p>
               <p className="task-details"><strong>End Time:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
               <p className="task-details"><strong>Username:</strong> {task.user_name}</p>

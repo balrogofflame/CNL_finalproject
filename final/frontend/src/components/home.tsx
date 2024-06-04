@@ -4,27 +4,6 @@ import { AuthContext } from '../AuthContext';
 import TaskList from './tasklist.tsx';
 import axios from 'axios';
 
-const geoFindMe = () => {
- 
-  if (!navigator.geolocation) {
-    console.log("<p>Geolocation is not supported by your browser</p>");
-    return;
-  }
-
-  function success(position) {
-    var longitude = parseFloat(position.coords.longitude);
-    var latitude = parseFloat(position.coords.latitude);
-
-    console.log(latitude, longitude)
-  }
-
-  function error() {
-    console.log("Unable to retrieve your location");
-  }
-  navigator.geolocation.getCurrentPosition(success, error);
-
-}
-
 const Home = () => {
   const geoFindMe = () => {
     if (!navigator.geolocation) {
@@ -38,8 +17,6 @@ const Home = () => {
   
       // 更新状态以存储经度和纬度
       setLocation({ longitude, latitude });
-  
-      //console.log(latitude, longitude)
     }
   
     function error() {
@@ -182,7 +159,7 @@ const Home = () => {
       </div>
       <div style={{ display: 'flex', height: 'calc(100vh - 50px)', marginTop: '20px' }}>
         <div style={{ flex: 1, background: '#f0f0f0' }}>
-          {userId &&<TaskList userId={userId}/>}
+          {userId &&<TaskList userId={userId} helperLongitude={Number(location.longitude)} helperLatitude={Number(location.latitude)} />}
         </div>
         <div style={{
           width: '2px',
