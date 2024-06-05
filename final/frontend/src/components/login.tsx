@@ -27,6 +27,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>Welcome to TRIUMA!</h1>
+      <h3>TRI-University Mutual Assistance</h3>
       <h2>Login</h2>
       <button onClick={loginWithGitHub}>Login with GitHub</button>
     </div>
