@@ -90,7 +90,7 @@ const TaskAccepts = () => {
         <p><strong>報酬內容:</strong> {task.quest_reward}</p>
         <p><strong>結束時間:</strong> {new Date(task.quest_end_time).toLocaleString()}</p>
         <button onClick={handleRefreshClick}>刷新</button>
-        <button onClick={handleGoHome}>回主業</button>
+        <button onClick={handleGoHome}>回主頁</button>
       </div>
     </div>
   );
