@@ -94,8 +94,8 @@ const AcceptStatusList: React.FC<AcceptStatusListProps> = ({ UID }) => {
       
       try {
         // 調用後端接口接受任務
-        await axios.post(`http://localhost:5000/api/${seeker_uid}/accept-helper`, { helper_uid });
-        console.log(`Helper accepted`);
+        await axios.post(`http://localhost:5000/api/${seeker_uid}/accept-helper`, { helper_uid, quest_id });
+        console.log(`Helper is accepted.`);
     
       } catch (error) {
         console.error('Error accepting helper:', error);
@@ -115,6 +115,7 @@ const AcceptStatusList: React.FC<AcceptStatusListProps> = ({ UID }) => {
         <div>
           {acceptStatus.map((acceptStatus, index) => (
             <div key={index} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+              <p><strong>Quest ID:</strong> {acceptStatus.quest_id}</p>
               <p><strong>Quest Name:</strong> {acceptStatus.quest_name}</p>
               <p><strong>Helper Name:</strong> {acceptStatus.user_name}</p>
               <p><strong>Helper Rating:</strong> {acceptStatus.user_rating}</p>

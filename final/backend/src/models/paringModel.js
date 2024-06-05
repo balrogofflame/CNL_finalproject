@@ -55,4 +55,39 @@ const getMyQuestAcceptStatus = async (pool, userId) => {
     }
 };
 
-module.exports = { getQuestsAcceptStatus, getMyQuestAcceptStatus };
+const updateQuestAndAcceptStatus = async (pool, para) => {
+    const client = await pool.connect();
+    const { quest_id, userId, helper_uid } = para;
+    console.log(quest_id, userId, helper_uid)
+    try {
+      await client.query('BEGIN'); // 开始事务
+      
+      // 更新 QUEST 表
+      await client.query(`
+        UPDATE QUEST 
+        SET (Helper_UID, Quest_status) = ($1, 'completed')
+        WHERE Quest_ID = $2`,
+        [helper_uid, quest_id]
+      );
+      
+      // 更新 ACCEPT 表
+      const acceptResult = await client.query(`
+        UPDATE ACCEPT
+        SET Accept_status = 'accepted'
+        WHERE Quest_ID = $1`,
+        [quest_id]
+      );
+
+      await client.query('COMMIT'); // 提交事务
+      return acceptResult;
+
+    } catch (error) {
+      await client.query('ROLLBACK'); // 在发生错误时回滚事务
+      console.error('Error updating quest and accept status:', error);
+      throw error;
+    } finally {
+      client.release();
+    }
+};
+
+module.exports = { getQuestsAcceptStatus, getMyQuestAcceptStatus, updateQuestAndAcceptStatus };
