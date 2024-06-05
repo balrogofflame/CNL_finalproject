@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
+import '../styles/Login.css'; // Import the CSS file
 
 const Login = () => {
   const { isAuthenticated, loginWithGitHub, setIsAuthenticated } = useContext(AuthContext);
@@ -24,8 +25,9 @@ const Login = () => {
   }, [isAuthenticated, navigate, setIsAuthenticated]);
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="login-container">
+      <h1>Welcome to TRIUMA!</h1>
+      <h2>Login</h2>
       <button onClick={loginWithGitHub}>Login with GitHub</button>
     </div>
   );
