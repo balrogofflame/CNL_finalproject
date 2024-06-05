@@ -66,10 +66,28 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
     return sortedTasks.sort((a, b) => {
       const dateA = new Date(a.quest_end_time).getTime();
       const dateB = new Date(b.quest_end_time).getTime();
+      const distA = Number(getDistanceBetweenPoints(a.quest_latitude, a.quest_logitude, helperLatitude, helperLongitude));
+      const distB = Number(getDistanceBetweenPoints(b.quest_latitude, b.quest_logitude, helperLatitude, helperLongitude));
+      const ratingA = parseFloat(a.user_rating);
+      const ratingB = parseFloat(b.user_rating);
+
       if (sortMethod === 'newToOld') {
         return dateB - dateA;
-      } else if (sortMethod === 'oldToNew') {
+      } 
+      else if (sortMethod === 'oldToNew') {
         return dateA - dateB;
+      }
+      else if (sortMethod === 'nearToFar'){
+        return distA - distB;
+      }
+      else if (sortMethod === 'farToNear'){
+        return distB - distA;
+      }
+      else if (sortMethod === 'rate_highToLow'){
+        return ratingB - ratingA;
+      }
+      else if (sortMethod === 'rate_lowToHigh'){
+        return ratingA - ratingB;
       }
       return 0; // 如果没有匹配到排序方法，则返回 0 表示不排序
     });
@@ -122,6 +140,10 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
         <select id="sort" value={sortMethod} onChange={handleSortChange}>
           <option value="newToOld">New to Old</option>
           <option value="oldToNew">Old to New</option>
+          <option value="nearToFar">Near to Far</option>
+          <option value="farToNear">Far to Near</option>
+          <option value="rate_highToLow">Highest User Rating</option>
+          <option value="rate_lowToHigh">Lowest User Rating</option>
         </select>
       </div>
       {sortedTasks.length === 0 ? (
