@@ -6,6 +6,7 @@ import Register from './components/register.tsx'; // 假设有一个 Register �
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider, AuthContext } from './AuthContext.js';
 import ProfilePage from './components/profilepage.tsx';
+import ParingPage from './components/paring.tsx';
 import TaskDetails from './components/taskdetails.tsx';
 import TaskAccepts from './components/taskaccepts.tsx';
 
@@ -37,6 +38,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
       <Route path="/profile/:userId" element={<ProtectedRoute element={<ProfilePage />} />} />
+      <Route path="/paring/:userId" element={<ProtectedRoute element={<ParingPage />} />} />
       <Route path="/task-details/:id" element={<ProtectedRoute element={<TaskDetails />} />} />
       <Route path="/task-accepts/:userId/:id" element={<ProtectedRoute element={<TaskAccepts />} />} />
 

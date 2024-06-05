@@ -41,10 +41,11 @@ router.post('/api/request', async (req, res) => {
 });
 
 // 获取所有任务
-router.get('/api/tasks', async (req, res) => {
+router.get('/api/:userId/tasks', async (req, res) => {
   const pool = req.pool;
+  const { userId } = req.params;
   try {
-    const tasks = await getAllTasks(pool);
+    const tasks = await getAllTasks(pool, userId);
     res.json(tasks);
   } catch (error) {
     res.status(500).send('Error fetching tasks: ' + error.message);
@@ -151,8 +152,8 @@ router.get('/api/accept/request/:id', async (req, res) => {
 router.post('/api/accept-task/:id', async (req, res) => {
   const pool = req.pool;
   const { id } = req.params; // 任務 ID
-  const { userId } = req.body; // 接收用户 ID
-  console.log(userId);
+  const { userId, dist } = req.body; // 接收用户 ID
+  console.log(userId, dist);
   try {
     const task = await getTaskById(pool, id);
     console.log(id);
@@ -161,7 +162,7 @@ router.post('/api/accept-task/:id', async (req, res) => {
     }
 
     // 假定 acceptTask 是用來更新任務的函數，這裡我們不再傳遞用戶 ID 因為不做授權檢查
-    const updatedTask = await acceptTask(pool, id, userId);
+    const updatedTask = await acceptTask(pool, id, userId, dist);
     res.status(200).json(updatedTask);
   } catch (error) {
     console.error('Error accepting task:', error);

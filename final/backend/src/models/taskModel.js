@@ -34,13 +34,14 @@ const createTask = async (pool, task) => {
     }
   };
   
-const getAllTasks = async (pool) => {
+const getAllTasks = async (pool, userId) => {
     const client = await pool.connect();
     try {
       const result = await client.query(
-        `SELECT t.*, u.User_name, u.User_rating 
-         FROM quest t
-         JOIN USER_ u ON t.Seeker_UID = u.user_id`
+        `SELECT q.*, u.User_name, u.User_rating 
+         FROM quest q
+         JOIN USER_ u ON q.Seeker_UID = u.user_id
+         WHERE q.Seeker_UID != $1`, [userId]
       );
       return result.rows;
     } catch (error) {
@@ -83,15 +84,15 @@ const deleteTaskById = async (pool, taskId) => {
 };
 
 
-const acceptTask = async (pool, taskId, userId) => {
+const acceptTask = async (pool, taskId, userId, dist) => {
   const client = await pool.connect();
   try {
       await client.query('BEGIN'); // 开始事务
 
       // 插入 ACCEPT 表
       const insertResult = await client.query(
-          `INSERT INTO ACCEPT (User_ID, Quest_ID) VALUES ($1, $2) RETURNING *`,
-          [userId, taskId]
+          `INSERT INTO ACCEPT (User_ID, Quest_ID, Distance) VALUES ($1, $2, $3) RETURNING *`,
+          [userId, taskId, dist]
       );
 
       await client.query('COMMIT'); // 提交事务

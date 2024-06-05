@@ -47,7 +47,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get<Task[]>('http://localhost:5000/api/tasks');
+        const response = await axios.get<Task[]>(`http://localhost:5000/api/${userId}/tasks`);
         setTasks(response.data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -82,13 +82,13 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
     navigate(`/profile/${userId}`);
   };
 
-  const handleAcceptTaskClick = async (e: React.MouseEvent, taskId: string) => {
+  const handleAcceptTaskClick = async (e: React.MouseEvent, taskId: string, dist: number) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the task click handler
       // 調用後端接口接受任務
       
       try {
         // 調用後端接口接受任務
-        await axios.post(`http://localhost:5000/api/accept-task/${taskId}`, { userId });
+        await axios.post(`http://localhost:5000/api/accept-task/${taskId}`, { userId, dist });
         console.log(`Task ${taskId} accepted`);
     
         // 跳轉到特定的頁面，例如到任務詳情頁面
@@ -142,7 +142,7 @@ const TaskList: React.FC<TaskListProps> = ({ userId, helperLongitude, helperLati
               <p className="task-details"><strong>User Rating:</strong> {task.user_rating}</p>
               <div className="task-buttons">
                 <button onClick={(e) => handleProfileClick(e, task.seeker_uid)}>View Profile</button>
-                <button onClick={(e) => handleAcceptTaskClick(e, task.quest_id)}>Accept Task</button>
+                <button onClick={(e) => handleAcceptTaskClick(e, task.quest_id, Number(getDistanceBetweenPoints(task.quest_latitude, task.quest_logitude, helperLatitude, helperLongitude)))}>Accept Task</button>
                 <button onClick={(e) => handleReportTaskClick(e, task.quest_id)}>Report Task</button>
               </div>
             </li>

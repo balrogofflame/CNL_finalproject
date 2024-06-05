@@ -26,6 +26,7 @@ const Home = () => {
   }
   
   const [location, setLocation] = useState({ longitude: String, latitude: String });
+  console.log(location)
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValues, setInputValues] = useState({
     questname: '',
@@ -146,6 +147,10 @@ const Home = () => {
     setSelectedOption(e.target.value);
   };
 
+  const handleParing = () => {
+    navigate(`/paring/${userId}`);
+  }
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -155,6 +160,7 @@ const Home = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px' }}>
         <h1>TRIUMA</h1> {/* Preserving the main title */}
+        <button onClick={handleParing}>Pairing System</button>
         <button onClick={handleLogout}>Logout</button>
       </div>
       <div style={{ display: 'flex', height: 'calc(100vh - 50px)', marginTop: '20px' }}>
